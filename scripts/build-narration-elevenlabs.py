@@ -35,7 +35,8 @@ def load_env() -> None:
         for line in f.read_text(encoding="utf-8").splitlines():
             if "=" in line and not line.lstrip().startswith("#"):
                 k, v = line.split("=", 1)
-                os.environ.setdefault(k.strip(), v.strip().strip('"'))
+                if v.strip():  # .env.local wins over the environment
+                    os.environ[k.strip()] = v.strip().strip('"')
 
 
 def load_items() -> list[dict]:
