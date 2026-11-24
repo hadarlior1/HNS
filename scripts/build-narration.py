@@ -28,7 +28,7 @@ def load_steps(lang: str = "he") -> list[dict]:
 
 async def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--voice", default="he-IL-AvriNeural")
+    ap.add_argument("--voice", default="he-IL-HilaNeural")
     ap.add_argument("--rate", default="+0%")
     ap.add_argument("--only", default="")
     ap.add_argument("--lang", default="he", choices=["he", "en"], help="en: English text → public/narration/en/ (use an English voice)")

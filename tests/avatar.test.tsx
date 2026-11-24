@@ -54,7 +54,7 @@ describe("AvatarPanel playback order", () => {
     });
     const { container } = render(<AvatarPanel step={step} narrate />);
     fireEvent.error(container.querySelector("video")!);
-    expect(screen.getByAltText("העוזר הדיגיטלי, EPR")).toHaveAttribute("data-speaking", "true");
+    expect(screen.getByAltText("רבקה אליהו, EPR")).toHaveAttribute("data-speaking", "true");
   });
 
   it("moves the mouth with the voice level", () => {

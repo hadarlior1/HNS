@@ -2,16 +2,10 @@ import { modules } from "../src/content/lessons";
 import { heygenVideos, renderHeygenMarkdown } from "../scripts/heygen";
 
 describe("heygen video list", () => {
-  it("has exactly 8 videos: welcome 0.1 + one intro per module 1-7", () => {
+  it("has the welcome 0.1 + one intro per module", () => {
     expect(heygenVideos(modules).map((v) => v.file)).toEqual([
       "0.1.mp4",
-      "m1.mp4",
-      "m2.mp4",
-      "m3.mp4",
-      "m4.mp4",
-      "m5.mp4",
-      "m6.mp4",
-      "m7.mp4",
+      ...modules.slice(1).map((m) => `m${m.id}.mp4`),
     ]);
   });
 
@@ -29,7 +23,7 @@ describe("renderHeygenMarkdown", () => {
       expect(md).toContain(`\`${v.file}\``);
       expect(md).toContain(`> ${v.script}`);
     });
-    expect(md.match(/≈ \d+ שניות/g)).toHaveLength(8);
+    expect(md.match(/≈ \d+ שניות/g)).toHaveLength(modules.length);
   });
 
   it("keeps multi-line scripts inside the quote", () => {

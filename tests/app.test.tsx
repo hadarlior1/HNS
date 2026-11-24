@@ -103,15 +103,15 @@ describe("App", () => {
     const video = container.querySelector("video")!;
     fireEvent.error(video);
     expect(container.querySelector("video")).toBeNull();
-    expect(screen.getByAltText("העוזר הדיגיטלי, EPR")).toBeInTheDocument();
+    expect(screen.getByAltText("רבקה אליהו, EPR")).toBeInTheDocument();
     expect(screen.getByTestId("transcript")).toHaveTextContent(findStep("0.1")!.step.script);
   });
 
   it("swaps the still avatar for the video once the clip has data", () => {
     const { container } = render(<App />);
-    expect(screen.getByAltText("העוזר הדיגיטלי, EPR")).toBeInTheDocument();
+    expect(screen.getByAltText("רבקה אליהו, EPR")).toBeInTheDocument();
     fireEvent.loadedData(container.querySelector("video")!);
-    expect(screen.queryByAltText("העוזר הדיגיטלי, EPR")).toBeNull();
+    expect(screen.queryByAltText("רבקה אליהו, EPR")).toBeNull();
     expect(container.querySelector("video")).not.toHaveClass("hidden");
   });
 
