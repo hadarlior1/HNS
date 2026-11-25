@@ -96,6 +96,21 @@ export function narrate(id: string, text: string, handlers: NarrationHandlers = 
 
   const fallback = () => {
     if (stopped) return;
+    // Hebrew: every step has a recording of the presenter's voice. The browser's own Hebrew voice
+    // is a man's on Windows ("Asaf"), so never let it speak over or instead of her: run the captions
+    // silently for the script's spoken length and finish normally (auto-advance keeps working).
+    if (opts.lang !== "en") {
+      const total = (text.trim().split(/\s+/).length / 2.3) * 1000 / (opts.rate || 1);
+      const t0 = performance.now();
+      handlers.onStart?.();
+      loop((now) => {
+        const f = Math.min(1, (now - t0) / total);
+        handlers.onWord?.(wordAtProgress(text, f));
+        handlers.onProgress?.(f);
+        if (f >= 1) finish(true);
+      });
+      return;
+    }
     let speaking = false;
     speak(
       text,

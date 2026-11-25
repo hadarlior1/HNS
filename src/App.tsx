@@ -288,12 +288,12 @@ export default function App({ welcome = false }: AppProps) {
                 step={step}
               />
               {/* A separate window under the screenshot: subtitles + tip/warning + player controls. */}
-              <section className="caption-card relative rounded-2xl border border-[var(--line)] bg-white px-3 pt-2 pb-1.5 md:pe-28">
+              <section className="caption-card relative rounded-2xl border border-[var(--line)] bg-white px-3 pt-2 pb-1.5 md:pe-44">
                 {/* The presenter stands in the caption window (bottom-left), next to her words. */}
                 <div
                   data-testid="presenter-slot"
                   style={{ ["--tilt" as string]: -1 }}
-                  className="presenter-slot absolute bottom-2 left-2 z-20 w-16 md:bottom-1 md:left-3 md:w-[clamp(56px,7vw,120px)]"
+                  className="presenter-slot absolute bottom-2 left-2 z-20 w-16 md:bottom-1 md:left-3 md:w-[clamp(80px,11vw,190px)]"
                 >
                   <AvatarPanel
                     key={`${step.id}-${replay}-${lang}`}

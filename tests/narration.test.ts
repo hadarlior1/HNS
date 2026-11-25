@@ -40,11 +40,19 @@ describe("narrate", () => {
     expect(onEnd).toHaveBeenCalled();
   });
 
-  it("falls back to browser speech when the MP3 can't be played", () => {
+  it("Hebrew: a missing MP3 never falls back to the browser voice (a man's voice on Windows)", () => {
     const speak = vi.spyOn(speech, "speak").mockImplementation(() => {});
-    narrate("9.9", "טקסט גיבוי");
+    const onStart = vi.fn();
+    narrate("9.9", "טקסט גיבוי", { onStart });
     FakeAudio.last.onerror?.();
-    expect(speak).toHaveBeenCalledWith("טקסט גיבוי", expect.any(Object), expect.objectContaining({}));
+    expect(speak).not.toHaveBeenCalled();
+    expect(onStart).toHaveBeenCalled(); // silent captions run instead
+  });
+
+  it("English without recordings speaks with the browser voice", () => {
+    const speak = vi.spyOn(speech, "speak").mockImplementation(() => {});
+    narrate("9.9", "fallback text", {}, { lang: "en" });
+    expect(speak).toHaveBeenCalledWith("fallback text", expect.any(Object), expect.objectContaining({ lang: "en" }));
   });
 
   it("stop pauses the audio and suppresses a late fallback", () => {
