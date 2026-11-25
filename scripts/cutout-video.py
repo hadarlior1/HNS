@@ -24,15 +24,16 @@ def alpha_mask(frame: np.ndarray, threshold: int = 22) -> np.ndarray:
     border = np.unique(np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]]))
     bg = np.isin(labels, border[border != 0]) & (dark == 1)
     # enclosed gaps (e.g. between arm and body) are pure black too: drop large near-black islands
-    black = (frame.max(axis=2) < 10).astype(np.uint8)
+    # pitch-black enclosed gaps only (dark clothing such as navy trousers must stay solid)
+    black = (frame.max(axis=2) < 6).astype(np.uint8)
     n2, lab2, stats, _ = cv2.connectedComponentsWithStats(black, connectivity=4)
     for k in range(1, n2):
-        if stats[k, cv2.CC_STAT_AREA] > 250:
+        if stats[k, cv2.CC_STAT_AREA] > 1500:
             bg |= lab2 == k
     alpha = np.where(bg, 0, 255).astype(np.uint8)
-    # soften the edge by one pixel so the figure doesn't look cut with scissors
-    alpha = cv2.erode(alpha, np.ones((2, 2), np.uint8))
-    return cv2.GaussianBlur(alpha, (3, 3), 0)
+    # pull the edge in a little and soften it, so no dark outline from the black background remains
+    alpha = cv2.erode(alpha, np.ones((3, 3), np.uint8))
+    return cv2.GaussianBlur(alpha, (5, 5), 0)
 
 
 def main() -> None:
