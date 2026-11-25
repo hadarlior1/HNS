@@ -18,8 +18,10 @@ import imageio_ffmpeg
 import numpy as np
 
 
-def alpha_mask(frame: np.ndarray, threshold: int = 22) -> np.ndarray:
-    """Transparent = the black background around the figure (connected to the frame border)."""
+def alpha_mask(frame: np.ndarray, threshold: int = 6) -> np.ndarray:
+    """Transparent = the black background around the figure (connected to the frame border).
+    HeyGen renders the background as pure black (0-2); the navy trousers have creases down to ~10-20,
+    so the threshold stays very low or the crotch crease (connected to the gap between the legs) is cut."""
     dark = (frame.max(axis=2) < threshold).astype(np.uint8)
     n, labels = cv2.connectedComponents(dark, connectivity=4)
     border = np.unique(np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]]))
@@ -30,7 +32,7 @@ def alpha_mask(frame: np.ndarray, threshold: int = 22) -> np.ndarray:
     return cv2.GaussianBlur(alpha, (5, 5), 0)
 
 
-def fill_gaps(frame: np.ndarray, threshold: int = 22) -> np.ndarray:
+def fill_gaps(frame: np.ndarray, threshold: int = 6) -> np.ndarray:
     """Black gaps enclosed by the figure (between arm and body) would show the page through the
     presenter and read as a hole in the clothes; paint them from the surrounding colours instead."""
     dark = (frame.max(axis=2) < threshold).astype(np.uint8)
