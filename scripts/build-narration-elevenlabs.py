@@ -28,6 +28,22 @@ STEP_OUT = ROOT / "public" / "narration"
 INTRO_OUT = ROOT / "private" / "heygen-audio"
 API = "https://api.elevenlabs.io/v1"
 
+# Pronunciation for the voice only (captions on screen keep the plain spelling).
+# Whole words; add a vowelled form for every prefix that appears in the scripts.
+PRONOUNCE = {
+    "ספק": "סָפַק",
+    "הספק": "הַסָּפַק",
+    "וספק": "וְסָפַק",
+    "לספק": "לַסָּפַק",
+}
+
+
+def spoken(text: str) -> str:
+    import re
+    for plain, vowelled in PRONOUNCE.items():
+        text = re.sub(rf"(?<![א-ת]){plain}(?![א-ת])", vowelled, text)
+    return text
+
 
 def load_env() -> None:
     f = ROOT / ".env.local"
@@ -90,7 +106,7 @@ def main() -> None:
         if only and item["id"] not in only:
             continue
         audio = call(f"/text-to-speech/{args.voice}?output_format=mp3_44100_128", key, {
-            "text": item["text"],
+            "text": spoken(item["text"]),
             "model_id": args.model,
             "language_code": "he",
         })
