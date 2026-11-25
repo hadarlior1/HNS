@@ -14,20 +14,20 @@ export const quiz: Record<string, QuizQuestion[]> = {
       he: {
         q: `איך מגיעים למסך "חיפוש והצגת מסמכים"?`,
         options: [
-          `לשונית "רכש" בסרגל העליון, ואז "חיפוש והצגת מסמכים"`,
+          `לשונית "הזמנות רכש" בסרגל העליון, ואז "חיפוש והצגת מסמכים"`,
           `לשונית "דוחות", ואז "הזמנות"`,
           `לחיצה על לוגו EPR בראש המסך`,
         ],
-        explain: `המסך נמצא בלשונית "רכש", בצד ימין של הסרגל העליון.`,
+        explain: `המסך נמצא בלשונית "הזמנות רכש", בצד ימין של הסרגל העליון.`,
       },
       en: {
         q: `How do you reach the Search and View Documents screen?`,
         options: [
-          `The Purchasing tab in the top ribbon, then Search and View Documents`,
+          `The Purchase Orders tab in the top ribbon, then Search and View Documents`,
           `The Reports tab, then Orders`,
           `Click the EPR logo at the top of the screen`,
         ],
-        explain: `The screen is on the Purchasing tab, on the right of the top ribbon.`,
+        explain: `The screen is on the Purchase Orders tab, on the right of the top ribbon.`,
       },
       answer: 0,
     },
@@ -158,7 +158,7 @@ export const quiz: Record<string, QuizQuestion[]> = {
       answer: 0,
     },
     {
-      source: "4.5",
+      source: "4.6",
       he: {
         q: `איך רואים את המסמכים שצורפו להזמנה?`,
         options: [

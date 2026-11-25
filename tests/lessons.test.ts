@@ -24,14 +24,14 @@ test("exact ordered list of step ids", () => {
     "1.1", "1.2", "1.3",
     "2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7",
     "3.1", "3.2", "3.3",
-    "4.1", "4.2", "4.3", "4.4", "4.5",
+    "4.1", "4.2", "4.3", "4.4", "4.5", "4.6",
     "5.1", "5.2", "5.3", "5.4",
   ]);
 });
 
-test("warnings on 2.2 and 4.4; 4.4 is the exact system message", () => {
-  expect(allSteps.filter(s => s.warning).map(s => s.id)).toEqual(["2.2", "4.4"]);
-  expect(findStep("4.4")?.step.warning).toBe("אזהרה: אין תקציב פנוי - ההזמנה תאושר בהליך מיוחד בלבד !!");
+test("warnings on 2.2 and 4.5; 4.5 is the exact system message", () => {
+  expect(allSteps.filter(s => s.warning).map(s => s.id)).toEqual(["2.2", "4.5"]);
+  expect(findStep("4.5")?.step.warning).toBe("אזהרה: אין תקציב פנוי - ההזמנה תאושר בהליך מיוחד בלבד !!");
 });
 
 it.each(allSteps)("step $id: Hebrew script of 12-90 words, highlight inside the screen", (s) => {

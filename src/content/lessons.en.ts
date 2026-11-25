@@ -23,7 +23,7 @@ export const modulesEn: EnModule[] = [
       {
         id: "1.1",
         title: "Opening the screen from the menu",
-        script: `In the top ribbon, go to the Purchasing tab. On the right of the ribbon, click Search and View Documents. The Search and View Documents – Purchasing screen opens, and from it you can find any order in the system.`,
+        script: `In the top ribbon, go to the Purchase Orders tab. On the right of the ribbon, click Search and View Documents. The Search and View Documents – Purchasing screen opens, and from it you can find any order in the system.`,
       },
       {
         id: "1.2",
@@ -62,7 +62,7 @@ export const modulesEn: EnModule[] = [
       {
         id: "2.4",
         title: "Searching by supplier",
-        script: `To see only one supplier's orders, choose it in the Supplier field, or type the supplier number in the Supplier No. field. If you don't remember the exact name, double-click the supplier field and a search window opens.`,
+        script: `To see only one supplier's orders, choose it in the Supplier field, or type the supplier number in the Supplier No. field. If you don't remember the exact name, right-click the supplier field and a search window opens.`,
       },
       {
         id: "2.5",
@@ -90,7 +90,7 @@ export const modulesEn: EnModule[] = [
       {
         id: "3.1",
         title: "The columns",
-        script: `Each row shows the order's serial number, document date, supplier number and name, Amount, and Not Supplied, the part not yet delivered. Further along the row are the department, details, contract number and budget items.`,
+        script: `Each row shows the order's serial number, document date, supplier number and name, Amount, and Not Supplied, the part not yet delivered. Further along the row are the department, details, contract number if there is one, and budget items.`,
       },
       {
         id: "3.2",
@@ -121,17 +121,22 @@ export const modulesEn: EnModule[] = [
       },
       {
         id: "4.3",
+        title: "Items order or service order",
+        script: `Choose whether the order is an items order or a service order. For an items order, make sure the tick is on Items Order; then, in the order lines, the person ordering chooses the required item. For a service order, make sure the tick is on Service Order. A service order needs no item, and you can type free text.`,
+      },
+      {
+        id: "4.4",
         title: "Order lines",
         script: `In the middle of the screen are the order lines. Each line has an item description, unit, quantity, price, discount and amount, and on the left the budget item. This shows exactly what was ordered and for how much.`,
       },
       {
-        id: "4.4",
+        id: "4.5",
         title: "Budget status",
         script: `At the bottom of the screen is the budget status of the selected item: annual budget, actual, requests and balance. If there isn't enough budget, a red bar with a warning appears and the order will need special approval.`,
         warning: `Warning: no budget available - the order will be approved through a special procedure only!`,
       },
       {
-        id: "4.5",
+        id: "4.6",
         title: "Attached documents",
         script: `To see documents attached to the order, such as a price quote or an invoice, click the red Attached Documents button. In the results list too, the paperclip icon at the start of a row shows that documents are attached.`,
       },
