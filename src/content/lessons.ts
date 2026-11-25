@@ -2,7 +2,7 @@ import type { Module, Step } from "./types";
 
 export type { Highlight, Module, Step } from "./types";
 
-// Scripts are spoken aloud by the presenter avatar (Rivka Eliyahu, EPR): first person, plural
+// Scripts are spoken aloud by the presenter avatar (Rivka, EPR): first person, plural
 // address, on-screen labels quoted exactly. Screens come from a recording of the
 // system screenshots (scripts/screens-from-images.py); highlights are % of each 1.86:1 screen image.
 export const modules: Module[] = [
@@ -15,7 +15,7 @@ export const modules: Module[] = [
         id: "0.1",
         title: "היכרות",
         script:
-          "שלום, אני רבקה אליהו משירות הלקוחות של מערכות פיננסיות ב-EPR, ואני אלווה אתכם בהדרכה על הצגת הזמנות במערכת ההזמנות. תלמדו איך מגיעים למסך החיפוש, איך מסננים לפי סוג מסמך, תאריך, מצב וספק, איך קוראים את רשימת התוצאות, ואיך פותחים הזמנה ומדפיסים אותה. בכל רגע תוכלו לשמוע הסבר שוב או לעבור לשלב הבא.",
+          "שלום, אני רבקה משירות הלקוחות של מערכות פיננסיות ב-EPR, ואני אלווה אתכם בהדרכה על הצגת הזמנות במערכת ההזמנות. תלמדו איך מגיעים למסך החיפוש, איך מסננים לפי סוג מסמך, תאריך, מצב וספק, איך קוראים את רשימת התוצאות, ואיך פותחים הזמנה ומדפיסים אותה. בכל רגע תוכלו לשמוע הסבר שוב או לעבור לשלב הבא.",
       },
     ],
   },

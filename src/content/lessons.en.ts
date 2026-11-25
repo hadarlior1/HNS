@@ -11,7 +11,7 @@ export const modulesEn: EnModule[] = [
       {
         id: "0.1",
         title: "Introduction",
-        script: `Hello, I am Rivka Eliyahu from EPR's finance systems customer service, and I will guide you through viewing orders in the orders system. You will learn how to reach the search screen, filter by document type, date, status and supplier, read the results list, and open and print an order. You can replay an explanation or move on at any time.`,
+        script: `Hello, I am Rivka from EPR's finance systems customer service, and I will guide you through viewing orders in the orders system. You will learn how to reach the search screen, filter by document type, date, status and supplier, read the results list, and open and print an order. You can replay an explanation or move on at any time.`,
       },
     ],
   },
