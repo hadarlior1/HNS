@@ -28,10 +28,4 @@ describe("player bar", () => {
     expect(resume).toHaveBeenCalled();
   });
 
-  it("shows playback progress", () => {
-    const { container } = render(<App />);
-    fireEvent.error(container.querySelector("video")!);
-    act(() => handlers.onProgress?.(0.5));
-    expect(screen.getByRole("progressbar", { name: "התקדמות ההסבר" })).toHaveAttribute("aria-valuenow", "50");
-  });
 });

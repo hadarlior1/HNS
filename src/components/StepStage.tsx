@@ -2,7 +2,6 @@ import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "re
 import type { Module, Step } from "../content/types";
 import { screenUrl } from "../lib/media";
 import KaraokeText from "./KaraokeText";
-import { stepLabel } from "../content/label";
 import { sentenceRange } from "../lib/words";
 import { useT } from "../lib/i18n";
 import Icon, { MODULE_ICON } from "./Icon";
@@ -122,14 +121,10 @@ function useZoom(step: Step, enabled: boolean, frameRef: React.RefObject<HTMLDiv
 }
 
 
-export default function StepStage({ module, step, focusTitle = false, activeWord = -1, captionText, presenter, showCaptions = true }: Props) {
+export default function StepStage({ module, step, presenter }: Props) {
   const t = useT();
   const [failed, setFailed] = useState<string | null>(null);
   const [loaded, setLoaded] = useState<string | null>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  useEffect(() => {
-    if (focusTitle) titleRef.current?.focus();
-  }, [focusTitle]);
   const showImage = failed !== step.id;
   const isMobile = useIsMobile();
   const [ratio, setRatio] = useState<number | null>(null);
@@ -137,25 +132,15 @@ export default function StepStage({ module, step, focusTitle = false, activeWord
   const frameRef = useRef<HTMLDivElement>(null);
   const fitH = useFitHeight(step.tip || step.warning ? 23.75 : 21);
   const zoom = useZoom(step, !fullView && showImage, frameRef, ratio, isMobile ? undefined : fitH);
-  const spoken = captionText ?? step.script;
   const panRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     const el = panRef.current;
     if (zoom && el) el.scrollTo?.({ left: -zoom.left, top: step.highlight ? -zoom.top : 0 });
   }, [zoom, step.highlight]);
 
+  // The screenshot window: the system screen only (captions and player are in their own window below).
   return (
-    <section aria-labelledby="step-title" className="rounded-2xl border border-[var(--line)] bg-white p-3 md:px-3 md:py-2">
-      <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 md:mb-1.5">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--brand-50)] px-3 py-1 text-xs font-semibold text-[var(--brand)]">
-          <Icon name={MODULE_ICON[module.id]} className="h-3.5 w-3.5" />
-          {module.title} · {t("step")} <bdi dir="ltr">{stepLabel(step.id)}</bdi>
-        </span>
-        <h2 id="step-title" ref={titleRef} tabIndex={-1} className="text-xl font-bold text-[var(--ink)] focus:outline-none md:text-lg">
-          {step.title}
-        </h2>
-      </div>
-
+    <section aria-labelledby="step-title" className="screen-window rounded-2xl border border-[var(--line)] bg-white p-2">
       {/* Width is capped from viewport height so image + ring scale together (keeps % coords exact). */}
       <div className={`relative mx-auto w-full ${zoom && !isMobile ? "" : "stage-fit"} ${step.tip || step.warning ? "has-notes" : ""}`}>
         {showImage ? (
@@ -208,6 +193,23 @@ export default function StepStage({ module, step, focusTitle = false, activeWord
         )}
       </div>
 
+    </section>
+  );
+}
+
+/** The window under the screenshot: subtitles, tip / warning, the full transcript, and the player. */
+export function StepCaption({ step, activeWord = -1, captionText, showCaptions = true, transcriptOpen = false, children }: {
+  step: Step;
+  transcriptOpen?: boolean;
+  activeWord?: number;
+  captionText?: string;
+  showCaptions?: boolean;
+  children?: ReactNode;
+}) {
+  const t = useT();
+  const spoken = captionText ?? step.script;
+  return (
+    <div className="caption-window">
       {/* Subtitles: the sentence being spoken, like a video's captions. Fixed height, so nothing jumps. */}
       <div data-testid="caption" className={`subtitles ${showCaptions ? "" : "sr-only"}`}>
         <p>
@@ -230,12 +232,13 @@ export default function StepStage({ module, step, focusTitle = false, activeWord
         </div>
       )}
 
-      <details className="transcript mt-2">
-        <summary>{t("transcript")}</summary>
-        <p data-testid="transcript">
+      {children}
+
+      <div className="transcript" aria-label={t("transcript")}>
+        <p id="step-transcript" data-testid="transcript" hidden={!transcriptOpen}>
           <KaraokeText text={step.script} active={captionText ? -1 : activeWord} />
         </p>
-      </details>
-    </section>
+      </div>
+    </div>
   );
 }

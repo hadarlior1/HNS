@@ -43,6 +43,8 @@ describe("App", () => {
     render(<App />);
     const nav = screen.getByRole("navigation", { name: "תוכן ההדרכה" });
     const target = findStep("4.5")!.step;
+    // chapters fold: open the chapter first
+    fireEvent.click(within(nav).getByRole("button", { name: new RegExp(findStep("4.5")!.module.title) }));
     const btn = within(nav).getByRole("button", { name: new RegExp(target.title) });
     fireEvent.click(btn);
     expect(heading()).toHaveTextContent(target.title);

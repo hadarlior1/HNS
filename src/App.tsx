@@ -6,7 +6,7 @@ import { loadProgress, markDone, resetProgress, setLast } from "./lib/progress";
 import { LangContext, loadLang, saveLang, tFor, type Lang } from "./lib/i18n";
 import Header from "./components/Header";
 import ModuleNav from "./components/ModuleNav";
-import StepStage from "./components/StepStage";
+import StepStage, { StepCaption } from "./components/StepStage";
 import AvatarPanel from "./components/AvatarPanel";
 import Controls, { RATES } from "./components/Controls";
 import ProcessStepper from "./components/ProcessStepper";
@@ -90,6 +90,7 @@ export default function App({ welcome = false }: AppProps) {
   const [progress, setProgress] = useState(0);
   const [player, setPlayer] = useState(loadPlayer);
   const [quizFor, setQuizFor] = useState<string | null>(null);
+  const [transcriptOpen, setTranscriptOpen] = useState(false);
   const [certificate, setCertificate] = useState(false);
   const [help, setHelp] = useState(false);
   const autoTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -279,15 +280,11 @@ export default function App({ welcome = false }: AppProps) {
               <ModuleNav modules={modules} currentId={step.id} done={done} open={navOpen} onSelect={select} onReset={reset} onClose={() => setNavOpen(false)} />
             </div>
             <main id="main" className="flex min-w-0 flex-col gap-2 xl:col-start-2 xl:row-start-1">
-              <ProcessStepper modules={modules} currentId={step.id} done={done} onSelect={select} />
+              <ProcessStepper modules={modules} currentId={step.id} done={done} onSelect={select} focusTitle={navigated} />
               <StepStage
                 key={`${step.id}-${lang}`}
                 module={module}
                 step={step}
-                focusTitle={navigated}
-                activeWord={activeWord}
-                captionText={introPlaying ? module.intro : undefined}
-                showCaptions={player.captions}
                 presenter={
                   <AvatarPanel
                     key={`${step.id}-${replay}-${lang}`}
@@ -304,27 +301,41 @@ export default function App({ welcome = false }: AppProps) {
                   />
                 }
               />
-              <div className="player-bar z-10 bg-white/95 px-3 py-2 backdrop-blur max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:border-t max-md:border-[var(--line)] max-md:pb-[max(0.5rem,env(safe-area-inset-bottom))] md:sticky md:bottom-0 md:rounded-2xl md:border md:border-[var(--line)] md:py-1.5">
-                <Controls
-                  isFirst={isFirst}
-                  isLast={isLast}
-                  finished={done.includes(step.id)}
-                  onPrev={goPrev}
-                  onNext={goNext}
-                  onReplay={() => setReplay((r) => r + 1)}
-                  narrate={narrate}
-                  onToggleNarrate={toggleNarrate}
-                  autoAdvance={autoAdvance}
-                  onToggleAuto={toggleAuto}
-                  paused={paused}
-                  onTogglePause={() => setPaused((v) => !v)}
-                  progress={progress}
-                  rate={player.rate}
-                  onRate={(rate) => updatePlayer({ rate })}
-                  captions={player.captions}
-                  onToggleCaptions={() => updatePlayer({ captions: !player.captions })}
-                />
-              </div>
+              {/* A separate window under the screenshot: subtitles + tip/warning + player controls. */}
+              <section className="caption-card rounded-2xl border border-[var(--line)] bg-white px-3 pt-2 pb-1.5">
+                <StepCaption
+                  key={`${step.id}-${lang}-caption`}
+                  step={step}
+                  activeWord={activeWord}
+                  captionText={introPlaying ? module.intro : undefined}
+                  showCaptions={player.captions}
+                  transcriptOpen={transcriptOpen}
+                >
+                  <div className="player-bar z-10 mt-2 bg-white/95 px-1 py-1 backdrop-blur max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:border-t max-md:border-[var(--line)] max-md:px-3 max-md:pb-[max(0.5rem,env(safe-area-inset-bottom))] md:pt-0.5">
+                    <Controls
+                      isFirst={isFirst}
+                      isLast={isLast}
+                      finished={done.includes(step.id)}
+                      onPrev={goPrev}
+                      onNext={goNext}
+                      onReplay={() => setReplay((r) => r + 1)}
+                      narrate={narrate}
+                      onToggleNarrate={toggleNarrate}
+                      autoAdvance={autoAdvance}
+                      onToggleAuto={toggleAuto}
+                      paused={paused}
+                      onTogglePause={() => setPaused((v) => !v)}
+                      progress={progress}
+                      rate={player.rate}
+                      onRate={(rate) => updatePlayer({ rate })}
+                      captions={player.captions}
+                      onToggleCaptions={() => updatePlayer({ captions: !player.captions })}
+                      transcriptOpen={transcriptOpen}
+                      onToggleTranscript={() => setTranscriptOpen((v) => !v)}
+                    />
+                  </div>
+                </StepCaption>
+              </section>
             </main>
           </div>
         )}
