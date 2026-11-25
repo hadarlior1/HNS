@@ -38,7 +38,7 @@ export default function Header({ done, total, navOpen, onToggleNav, onHome, onTo
             <Icon name="home" />
             <span className="hidden md:inline">{t("home")}</span>
           </button>
-          <div className="flex items-center gap-2 pe-2" role="group" aria-label={t("progress")} title={`${t("progress")}: ${done} ${t("of")} ${total} ${t("statSteps")}`}>
+          <div className="flex items-center gap-2 pe-2 xl:hidden" role="group" aria-label={t("progress")} title={`${t("progress")}: ${done} ${t("of")} ${total} ${t("statSteps")}`}>
             <svg viewBox="0 0 36 36" className="h-9 w-9 -rotate-90" role="progressbar" aria-label={t("stepsDone")} aria-valuemin={0} aria-valuemax={total} aria-valuenow={done}>
               <circle cx="18" cy="18" r={r} fill="none" stroke="var(--line)" strokeWidth="3.5" />
               <circle cx="18" cy="18" r={r} fill="none" stroke="url(#ring)" strokeWidth="3.5" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct / 100)} style={{ transition: "stroke-dashoffset 400ms ease-out" }} />

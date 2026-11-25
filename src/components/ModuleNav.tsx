@@ -73,7 +73,6 @@ export default function ModuleNav({ modules, currentId, done, open, onSelect, on
 
         <ol className="flex-1 overflow-y-auto px-2 pb-2">
           {modules.map((m, mi) => {
-            const completed = m.steps.filter((s) => done.includes(s.id)).length;
             const isOpen = openIds.has(m.id);
             const panelId = `nav-ch-${m.id}`;
             return (
@@ -85,9 +84,6 @@ export default function ModuleNav({ modules, currentId, done, open, onSelect, on
                   aria-controls={panelId}
                   className="flex w-full items-center gap-2 rounded-lg px-2 py-2.5 text-start hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-[var(--brand)]"
                 >
-                  <span className="shrink-0 rounded-md bg-[var(--brand-50)] px-1.5 py-0.5 text-[0.65rem] font-bold text-[var(--violet)]" dir="ltr">
-                    {completed}/{m.steps.length}
-                  </span>
                   <span className="flex-1 text-[0.8rem] font-bold leading-snug text-[var(--ink)]">
                     <span className="text-[var(--ink-3)]">{mi + 1}. </span>
                     {m.title}

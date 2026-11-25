@@ -43,12 +43,12 @@ const Icon = {
     </svg>
   ),
   play: (
-    <svg viewBox="0 0 24 24" className="h-5 w-5 rtl:-scale-x-100" fill="currentColor" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="h-4 w-4 rtl:-scale-x-100" fill="currentColor" aria-hidden="true">
       <path d="M8 5v14l11-7z" />
     </svg>
   ),
   pause: (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
       <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
     </svg>
   ),
@@ -100,7 +100,7 @@ export default function Controls(p: Props) {
   const nextRate = RATES[(RATES.indexOf(p.rate) + 1) % RATES.length] ?? 1;
   return (
     <div className="flex flex-col gap-2 md:gap-1">
-      <div className="flex items-center justify-between gap-2">
+      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
         <div className="flex items-center gap-1 md:gap-2">
           <Labeled label={t("replay")}>
             <button type="button" aria-label={t("replayTitle")} title={t("replayTitle")} onClick={p.onReplay} className={`${round} h-8 w-8 bg-slate-100 text-[var(--brand)] hover:bg-slate-200`}>
@@ -124,23 +124,24 @@ export default function Controls(p: Props) {
           </Labeled>
         </div>
 
-        <div className="flex items-center gap-2 md:gap-4">
+        {/* centred: previous / play-pause / next */}
+        <div className="flex items-center gap-1.5 md:gap-2">
           <Labeled label={t("prev")} mobile>
-            <button type="button" aria-label={t("prev")} title={t("prev")} onClick={p.onPrev} disabled={p.isFirst} className={`${round} h-9 w-9 bg-white text-[var(--ink-2)] shadow-sm ring-1 ring-[var(--line)] hover:bg-slate-50`}>
+            <button type="button" aria-label={t("prev")} title={t("prev")} onClick={p.onPrev} disabled={p.isFirst} className={`${round} h-8 w-8 bg-white text-[var(--ink-2)] shadow-sm ring-1 ring-[var(--line)] hover:bg-slate-50`}>
               {Icon.prev}
             </button>
           </Labeled>
-          <button type="button" aria-label={p.paused ? t("resume") : t("pause")} title={p.paused ? t("resume") : t("pause")} onClick={p.onTogglePause} className={`${round} brand-gradient h-10 w-10 text-white shadow-md hover:brightness-110`}>
+          <button type="button" aria-label={p.paused ? t("resume") : t("pause")} title={p.paused ? t("resume") : t("pause")} onClick={p.onTogglePause} className={`${round} brand-gradient h-8 w-8 text-white shadow-md hover:brightness-110`}>
             {p.paused ? Icon.play : Icon.pause}
           </button>
           <Labeled label={p.isLast ? t("finish") : t("next")} mobile>
-            <button type="button" aria-label={p.isLast ? t("finish") : t("next")} title={p.isLast ? t("finish") : t("next")} onClick={p.onNext} className={`${round} h-9 w-9 bg-white text-[var(--ink-2)] shadow-sm ring-1 ring-[var(--line)] hover:bg-slate-50`}>
+            <button type="button" aria-label={p.isLast ? t("finish") : t("next")} title={p.isLast ? t("finish") : t("next")} onClick={p.onNext} className={`${round} h-8 w-8 bg-white text-[var(--ink-2)] shadow-sm ring-1 ring-[var(--line)] hover:bg-slate-50`}>
               {p.isLast ? <UiIcon name="award" className="h-4 w-4" /> : Icon.next}
             </button>
           </Labeled>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-self-end gap-2">
           {p.onToggleTranscript && (
             <button type="button" aria-expanded={p.transcriptOpen ?? false} aria-controls="step-transcript" onClick={p.onToggleTranscript} className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold text-[var(--brand)] hover:bg-[var(--brand-50)] max-md:hidden">
               <span aria-hidden="true" className={`inline-block transition-transform ${p.transcriptOpen ? "-rotate-90" : ""}`}>◂</span>

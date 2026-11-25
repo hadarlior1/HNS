@@ -279,9 +279,9 @@ html[lang="en"] body {
   text-wrap: balance;
 }
 .subtitles .word-active {
-  background: rgba(253, 224, 71, 0.55);
-  box-shadow: none;
-  border-radius: 0.3rem;
+  background: none;
+  box-shadow: inset 0 -3px 0 var(--violet);
+  border-radius: 0;
   color: var(--brand);
 }
 .subtitles .word-spoken {

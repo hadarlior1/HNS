@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import type { Module } from "../content/types";
 import { stepLabel } from "../content/label";
 import { useT } from "../lib/i18n";
-import Icon, { MODULE_ICON } from "./Icon";
+import Icon from "./Icon";
 
 interface Props {
   modules: Module[];
@@ -74,9 +74,6 @@ export default function ProcessStepper({ modules, currentId, done, onSelect, foc
       {/* Where am I, in one line: "פרק 1: ברוכים הבאים | שלב 1.1: היכרות". Below xl it sits
           under the chapter circles; on wide screens it takes their place (the sidebar lists them). */}
       <div className="order-last mt-2 flex min-w-0 basis-full items-center gap-2 md:mt-0 xl:order-none xl:basis-auto xl:flex-1">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--brand-50)] text-[var(--brand)]" aria-hidden="true">
-          <Icon name={MODULE_ICON[current.id]} className="h-4.5 w-4.5" />
-        </span>
         <h2 id="step-title" ref={titleRef} tabIndex={-1} className="min-w-0 truncate text-base font-bold text-[var(--ink)] focus:outline-none">
           <span className="text-[var(--ink-2)]">
             {t("topic")} {mi + 1}: {current.title}
