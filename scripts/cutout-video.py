@@ -19,21 +19,28 @@ import numpy as np
 
 
 def alpha_mask(frame: np.ndarray, threshold: int = 22) -> np.ndarray:
+    """Transparent = the black background around the figure (connected to the frame border)."""
     dark = (frame.max(axis=2) < threshold).astype(np.uint8)
     n, labels = cv2.connectedComponents(dark, connectivity=4)
     border = np.unique(np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]]))
     bg = np.isin(labels, border[border != 0]) & (dark == 1)
-    # enclosed gaps (e.g. between arm and body) are pure black too: drop large near-black islands
-    # pitch-black enclosed gaps only (dark clothing such as navy trousers must stay solid)
-    black = (frame.max(axis=2) < 6).astype(np.uint8)
-    n2, lab2, stats, _ = cv2.connectedComponentsWithStats(black, connectivity=4)
-    for k in range(1, n2):
-        if stats[k, cv2.CC_STAT_AREA] > 1500:
-            bg |= lab2 == k
     alpha = np.where(bg, 0, 255).astype(np.uint8)
     # pull the edge in a little and soften it, so no dark outline from the black background remains
     alpha = cv2.erode(alpha, np.ones((3, 3), np.uint8))
     return cv2.GaussianBlur(alpha, (5, 5), 0)
+
+
+def fill_gaps(frame: np.ndarray, threshold: int = 22) -> np.ndarray:
+    """Black gaps enclosed by the figure (between arm and body) would show the page through the
+    presenter and read as a hole in the clothes; paint them from the surrounding colours instead."""
+    dark = (frame.max(axis=2) < threshold).astype(np.uint8)
+    n, labels = cv2.connectedComponents(dark, connectivity=4)
+    border = np.unique(np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]]))
+    holes = ((dark == 1) & ~np.isin(labels, border)).astype(np.uint8)
+    if not holes.any():
+        return frame
+    holes = cv2.dilate(holes, np.ones((3, 3), np.uint8))
+    return cv2.inpaint(frame, holes, 5, cv2.INPAINT_TELEA)
 
 
 def main() -> None:
@@ -54,7 +61,7 @@ def main() -> None:
                 break
             h = int(f.shape[0] * args.width / f.shape[1]) // 2 * 2
             f = cv2.resize(f, (args.width, h), interpolation=cv2.INTER_AREA)
-            rgba = cv2.cvtColor(f, cv2.COLOR_BGR2BGRA)
+            rgba = cv2.cvtColor(fill_gaps(f), cv2.COLOR_BGR2BGRA)
             rgba[:, :, 3] = alpha_mask(f)
             cv2.imwrite(str(pathlib.Path(tmp) / f"f{i:05d}.png"), rgba)
             i += 1

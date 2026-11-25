@@ -17,7 +17,7 @@ import HelpPanel from "./components/HelpPanel";
 import { moduleIntroUrl } from "./lib/media";
 import { isNarrationEnabled, setNarrationEnabled, stopSpeaking } from "./lib/speech";
 
-const AUTO_KEY = "hazmanot-training-auto-v1";
+const AUTO_KEY = "hazmanot-training-auto-v2";
 const PLAYER_KEY = "hazmanot-training-player-v1";
 const AUTO_DELAY_MS = 1500;
 
@@ -169,12 +169,13 @@ export default function App({ welcome = false }: AppProps) {
     }
   }, [index, steps.length]);
 
-  const goNext = useCallback(() => {
+  const goNext = useCallback((auto = false) => {
     markDone(steps[index].id);
     setDone(loadProgress().done);
     if (isLast) return setCertificate(true);
-    // End of a chapter: a short knowledge check first (once per chapter).
-    if (welcome && isModuleEnd && hasQuiz(module.id) && loadQuizScores()[module.id] === undefined) return setQuizFor(module.id);
+    // End of a chapter: a short knowledge check first (once per chapter) — only when the learner
+    // moves on by hand; automatic playback keeps running from chapter to chapter without stopping.
+    if (!auto && welcome && isModuleEnd && hasQuiz(module.id) && loadQuizScores()[module.id] === undefined) return setQuizFor(module.id);
     advance();
   }, [index, steps, isLast, isModuleEnd, module.id, advance, welcome]);
 
@@ -191,7 +192,7 @@ export default function App({ welcome = false }: AppProps) {
       setActiveWord(-1);
       clearTimeout(autoTimer.current);
       if (completed && autoAdvance && !isLast) {
-        autoTimer.current = setTimeout(goNext, AUTO_DELAY_MS);
+        autoTimer.current = setTimeout(() => goNext(true), AUTO_DELAY_MS);
       }
     },
     [autoAdvance, isLast, goNext],
@@ -285,7 +286,15 @@ export default function App({ welcome = false }: AppProps) {
                 key={`${step.id}-${lang}`}
                 module={module}
                 step={step}
-                presenter={
+              />
+              {/* A separate window under the screenshot: subtitles + tip/warning + player controls. */}
+              <section className="caption-card relative rounded-2xl border border-[var(--line)] bg-white px-3 pt-2 pb-1.5 md:pe-28">
+                {/* The presenter stands in the caption window (bottom-left), next to her words. */}
+                <div
+                  data-testid="presenter-slot"
+                  style={{ ["--tilt" as string]: -1 }}
+                  className="presenter-slot absolute bottom-2 left-2 z-20 w-16 md:bottom-1 md:left-3 md:w-[clamp(56px,7vw,120px)]"
+                >
                   <AvatarPanel
                     key={`${step.id}-${replay}-${lang}`}
                     step={step}
@@ -299,10 +308,7 @@ export default function App({ welcome = false }: AppProps) {
                     onProgress={setProgress}
                     rate={player.rate}
                   />
-                }
-              />
-              {/* A separate window under the screenshot: subtitles + tip/warning + player controls. */}
-              <section className="caption-card rounded-2xl border border-[var(--line)] bg-white px-3 pt-2 pb-1.5">
+                </div>
                 <StepCaption
                   key={`${step.id}-${lang}-caption`}
                   step={step}
@@ -317,7 +323,7 @@ export default function App({ welcome = false }: AppProps) {
                       isLast={isLast}
                       finished={done.includes(step.id)}
                       onPrev={goPrev}
-                      onNext={goNext}
+                      onNext={() => goNext()}
                       onReplay={() => setReplay((r) => r + 1)}
                       narrate={narrate}
                       onToggleNarrate={toggleNarrate}
