@@ -299,7 +299,7 @@ export default function App({ welcome = false }: AppProps) {
                 step={step}
               />
               {/* A separate window under the screenshot: subtitles + tip/warning + player controls. */}
-              <section className={`caption-card relative rounded-2xl border border-[var(--line)] bg-white px-3 pt-2 pb-1.5 ${player.avatar ? "md:pe-44" : ""}`}>
+              <section className={`caption-card relative rounded-2xl border border-[var(--line)] bg-white px-3 pt-2 pb-1.5 ${player.avatar ? "max-md:pe-20 md:pe-44" : ""}`}>
                 {/* The presenter stands in the caption window (bottom-left), next to her words. */}
                 <div
                   data-testid="presenter-slot"

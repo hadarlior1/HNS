@@ -113,7 +113,7 @@ export default function Controls(p: Props) {
             </button>
           </Labeled>
           <Labeled label={t("speed")}>
-            <button type="button" aria-label={`${t("speed")}: ${p.rate}×`} title={`${t("speed")}: ${p.rate}×`} onClick={() => p.onRate(nextRate)} className={`${round} h-8 min-w-8 bg-slate-100 px-2 text-xs font-bold text-[var(--ink-2)] hover:bg-slate-200`}>
+            <button type="button" aria-label={`${t("speed")}: ${p.rate}×`} title={`${t("speed")}: ${p.rate}×`} onClick={() => p.onRate(nextRate)} className={`${round} h-8 w-8 bg-slate-100 text-[0.7rem] font-bold text-[var(--ink-2)] hover:bg-slate-200`}>
               <span dir="ltr">{p.rate}×</span>
             </button>
           </Labeled>
@@ -126,16 +126,16 @@ export default function Controls(p: Props) {
 
         {/* centred: previous / play-pause / next */}
         <div className="flex items-center gap-1.5 md:gap-2">
-          <Labeled label={t("prev")} mobile>
-            <button type="button" aria-label={t("prev")} title={t("prev")} onClick={p.onPrev} disabled={p.isFirst} className={`${round} h-8 w-8 bg-white text-[var(--ink-2)] shadow-sm ring-1 ring-[var(--line)] hover:bg-slate-50`}>
+          <Labeled label={t("prev")}>
+            <button type="button" aria-label={t("prev")} title={t("prev")} onClick={p.onPrev} disabled={p.isFirst} className={`${round} h-8 w-8 bg-slate-100 text-[var(--brand)] hover:bg-slate-200`}>
               {Icon.prev}
             </button>
           </Labeled>
-          <button type="button" aria-label={p.paused ? t("resume") : t("pause")} title={p.paused ? t("resume") : t("pause")} onClick={p.onTogglePause} className={`${round} brand-gradient h-8 w-8 text-white shadow-md hover:brightness-110`}>
+          <button type="button" aria-label={p.paused ? t("resume") : t("pause")} title={p.paused ? t("resume") : t("pause")} onClick={p.onTogglePause} className={`${round} brand-gradient h-8 w-8 text-white hover:brightness-110`}>
             {p.paused ? Icon.play : Icon.pause}
           </button>
-          <Labeled label={p.isLast ? t("finish") : t("next")} mobile>
-            <button type="button" aria-label={p.isLast ? t("finish") : t("next")} title={p.isLast ? t("finish") : t("next")} onClick={p.onNext} className={`${round} h-8 w-8 bg-white text-[var(--ink-2)] shadow-sm ring-1 ring-[var(--line)] hover:bg-slate-50`}>
+          <Labeled label={p.isLast ? t("finish") : t("next")}>
+            <button type="button" aria-label={p.isLast ? t("finish") : t("next")} title={p.isLast ? t("finish") : t("next")} onClick={p.onNext} className={`${round} h-8 w-8 bg-slate-100 text-[var(--brand)] hover:bg-slate-200`}>
               {p.isLast ? <UiIcon name="award" className="h-4 w-4" /> : Icon.next}
             </button>
           </Labeled>

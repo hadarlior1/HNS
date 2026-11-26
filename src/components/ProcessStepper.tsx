@@ -22,7 +22,7 @@ function moduleState(m: Module, currentId: string, done: Set<string>): State {
 
 const circle: Record<State, string> = {
   done: "bg-[var(--violet)] text-white border-[var(--violet)]",
-  current: "brand-gradient text-white border-transparent ring-4 ring-[var(--brand)]/20",
+  current: "bg-[var(--brand)] text-white border-[var(--brand)] shadow-sm",
   todo: "bg-white text-[var(--ink-3)] border-slate-300",
 };
 
@@ -50,20 +50,20 @@ export default function ProcessStepper({ modules, currentId, done, onSelect, foc
 
   return (
     <nav aria-label={t("lessons")} className="rounded-2xl border border-[var(--line)] bg-white px-3 py-2 md:flex md:flex-wrap md:items-center md:gap-x-4 md:gap-y-1 md:px-4">
-      <ol className="flex items-center overflow-x-auto pb-1 md:flex-1 md:pb-0 xl:hidden" data-testid="process-stepper">
+      <ol className="flex items-center overflow-x-auto p-1 md:flex-1 md:p-1 xl:hidden" data-testid="process-stepper">
         {modules.map((m, i) => {
           const st = moduleState(m, currentId, doneSet);
           return (
-            <li key={m.id} ref={st === "current" ? currentRef : undefined} className="flex min-w-[2.75rem] flex-1 items-center">
+            <li key={m.id} ref={st === "current" ? currentRef : undefined} className="flex min-w-[2.25rem] flex-1 items-center md:min-w-[2.75rem]">
               <button
                 type="button"
                 onClick={() => onSelect(m.steps[0].id)}
                 aria-current={st === "current" ? "step" : undefined}
                 aria-label={`${t("topic")} ${i + 1}: ${m.title}${st === "done" ? ` (${t("completed")})` : ""}`}
                 title={m.title}
-                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold transition hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)] ${circle[st]}`}
+                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold md:h-9 md:w-9 md:text-sm transition hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)] ${circle[st]}`}
               >
-                {st === "done" ? <Icon name="check" className="h-4 w-4" /> : i + 1}
+                {st === "done" ? <Icon name="check" className="h-3.5 w-3.5 md:h-4 md:w-4" /> : i + 1}
               </button>
               {i < modules.length - 1 && <span aria-hidden="true" className={`mx-1 h-0.5 min-w-2 flex-1 rounded ${st === "done" ? "bg-[var(--violet)]" : "bg-slate-200"}`} />}
             </li>
@@ -74,7 +74,7 @@ export default function ProcessStepper({ modules, currentId, done, onSelect, foc
       {/* Where am I, in one line: "פרק 1: ברוכים הבאים | שלב 1.1: היכרות". Below xl it sits
           under the chapter circles; on wide screens it takes their place (the sidebar lists them). */}
       <div className="order-last mt-2 flex min-w-0 basis-full items-center gap-2 md:mt-0 xl:order-none xl:basis-auto xl:flex-1">
-        <h2 id="step-title" ref={titleRef} tabIndex={-1} className="min-w-0 truncate text-base font-bold text-[var(--ink)] focus:outline-none">
+        <h2 id="step-title" ref={titleRef} tabIndex={-1} className="min-w-0 truncate text-sm font-bold text-[var(--ink)] focus:outline-none md:text-base">
           <span className="text-[var(--ink-2)]">
             {t("topic")} {mi + 1}: {current.title}
           </span>
@@ -101,7 +101,7 @@ export default function ProcessStepper({ modules, currentId, done, onSelect, foc
                   aria-current={isCur ? "step" : undefined}
                   aria-label={`${t("step")} ${stepLabel(s.id)}: ${s.title}`}
                   title={s.title}
-                  className={`flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold transition hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)] ${
+                  className={`flex h-7 w-7 items-center justify-center rounded-full border text-[0.7rem] font-semibold md:h-8 md:w-8 md:text-xs transition hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)] ${
                     isCur
                       ? "border-[var(--brand)] bg-[var(--brand)] text-white"
                       : isDone
