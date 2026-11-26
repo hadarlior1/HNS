@@ -25,7 +25,7 @@ export default function Welcome({ modules, done, resumeId, onStart }: Props) {
   const stats: [string, string, string][] = [
     ["layers", String(modules.length - 1), t("statTopics")],
     ["check", String(steps.length), t("statSteps")],
-    ["clock", `~${minutes}`, t("statMinutes")],
+    ["clock", `${minutes}`, t("statMinutes")],
     ["award", "1", t("statCert")],
   ];
 
