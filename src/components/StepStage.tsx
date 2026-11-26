@@ -128,7 +128,7 @@ export default function StepStage({ module, step, presenter }: Props) {
   const showImage = failed !== step.id;
   const isMobile = useIsMobile();
   const [ratio, setRatio] = useState<number | null>(null);
-  const [fullView, setFullView] = useState(false);
+  const [fullView, setFullView] = useState(true); // whole screen by default; "התמקד באזור" zooms in
   const frameRef = useRef<HTMLDivElement>(null);
   const fitH = useFitHeight(step.tip || step.warning ? 23.75 : 21);
   const zoom = useZoom(step, !fullView && showImage, frameRef, ratio, isMobile ? undefined : fitH);

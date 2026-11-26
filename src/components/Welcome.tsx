@@ -26,7 +26,6 @@ export default function Welcome({ modules, done, resumeId, onStart }: Props) {
     ["layers", String(modules.length - 1), t("statTopics")],
     ["check", String(steps.length), t("statSteps")],
     ["clock", `${minutes}`, t("statMinutes")],
-    ["award", "1", t("statCert")],
   ];
 
   return (
@@ -60,7 +59,7 @@ export default function Welcome({ modules, done, resumeId, onStart }: Props) {
               )}
             </div>
 
-            <ul className="mt-8 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">
+            <ul className="mt-8 grid max-w-xl grid-cols-3 gap-3">
               {stats.map(([icon, value, label]) => (
                 <li key={label} className="rounded-2xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
                   <Icon name={icon} className="mb-1 h-5 w-5 text-[var(--accent-soft)]" />
