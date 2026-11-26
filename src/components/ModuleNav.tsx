@@ -12,10 +12,13 @@ interface Props {
   onSelect: (id: string) => void;
   onReset: () => void;
   onClose: () => void;
+  /** Presenter shown (drawer only; on wide screens the button sits under the contents). */
+  avatar?: boolean;
+  onToggleAvatar?: () => void;
 }
 
 // Course contents: docked on wide screens, a drawer below xl.
-export default function ModuleNav({ modules, currentId, done, open, onSelect, onReset, onClose }: Props) {
+export default function ModuleNav({ modules, currentId, done, open, onSelect, onReset, onClose, avatar = true, onToggleAvatar }: Props) {
   const t = useT();
   const currentRef = useRef<HTMLButtonElement>(null);
   const currentModule = modules.find((m) => m.steps.some((s) => s.id === currentId))?.id;
@@ -131,6 +134,12 @@ export default function ModuleNav({ modules, currentId, done, open, onSelect, on
           })}
         </ol>
         <div className="border-t border-[var(--line)] px-4 py-2 text-center">
+          {onToggleAvatar && (
+            <button type="button" aria-pressed={!avatar} onClick={onToggleAvatar} className="mb-1 flex min-h-9 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-[var(--brand)] hover:bg-[var(--brand-50)] xl:hidden">
+              <Icon name={avatar ? "eye-off" : "eye"} className="h-4 w-4" />
+              {avatar ? t("avatarHide") : t("avatarShow")}
+            </button>
+          )}
           <button type="button" onClick={onReset} className="min-h-8 text-xs text-[var(--ink-3)] underline-offset-2 hover:text-[var(--brand)] hover:underline">
             {t("resetProgress")}
           </button>

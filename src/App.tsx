@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import ModuleNav from "./components/ModuleNav";
 import StepStage, { StepCaption } from "./components/StepStage";
 import AvatarPanel from "./components/AvatarPanel";
+import Icon from "./components/Icon";
 import Controls, { RATES } from "./components/Controls";
 import ProcessStepper from "./components/ProcessStepper";
 import Welcome from "./components/Welcome";
@@ -37,16 +38,16 @@ function saveAuto(on: boolean): void {
   }
 }
 
-function loadPlayer(): { rate: number; captions: boolean } {
+function loadPlayer(): { rate: number; captions: boolean; avatar: boolean } {
   try {
-    const p = JSON.parse(window.localStorage.getItem(PLAYER_KEY) ?? "{}") as { rate?: number; captions?: boolean };
-    return { rate: RATES.includes(p.rate ?? 1) ? (p.rate ?? 1) : 1, captions: p.captions !== false };
+    const p = JSON.parse(window.localStorage.getItem(PLAYER_KEY) ?? "{}") as { rate?: number; captions?: boolean; avatar?: boolean };
+    return { rate: RATES.includes(p.rate ?? 1) ? (p.rate ?? 1) : 1, captions: p.captions !== false, avatar: p.avatar !== false };
   } catch {
-    return { rate: 1, captions: true };
+    return { rate: 1, captions: true, avatar: true };
   }
 }
 
-function savePlayer(p: { rate: number; captions: boolean }) {
+function savePlayer(p: { rate: number; captions: boolean; avatar: boolean }) {
   try {
     window.localStorage.setItem(PLAYER_KEY, JSON.stringify(p));
   } catch {
@@ -278,7 +279,17 @@ export default function App({ welcome = false }: AppProps) {
              drawer opened from the header, so the screenshot gets the full width. */
           <div className="mx-auto grid w-full max-w-[100rem] flex-1 grid-cols-1 content-start gap-3 overflow-x-clip p-3 max-md:pb-32 md:gap-3 md:p-3 xl:grid-cols-[16rem_minmax(0,1fr)]">
             <div className="xl:col-start-1 xl:row-start-1">
-              <ModuleNav modules={modules} currentId={step.id} done={done} open={navOpen} onSelect={select} onReset={reset} onClose={() => setNavOpen(false)} />
+              <ModuleNav modules={modules} currentId={step.id} done={done} open={navOpen} onSelect={select} onReset={reset} onClose={() => setNavOpen(false)} avatar={player.avatar} onToggleAvatar={() => updatePlayer({ avatar: !player.avatar })} />
+              {/* Some viewers prefer the screen without the presenter: her voice and the captions keep going. */}
+              <button
+                type="button"
+                aria-pressed={!player.avatar}
+                onClick={() => updatePlayer({ avatar: !player.avatar })}
+                className="mt-3 hidden w-full items-center justify-center gap-2 rounded-2xl border border-[var(--line)] bg-white px-3 py-2.5 text-sm font-semibold text-[var(--brand)] hover:bg-[var(--brand-50)] xl:flex"
+              >
+                <Icon name={player.avatar ? "eye-off" : "eye"} className="h-4 w-4" />
+                {player.avatar ? t("avatarHide") : t("avatarShow")}
+              </button>
             </div>
             <main id="main" className="flex min-w-0 flex-col gap-2 xl:col-start-2 xl:row-start-1">
               <ProcessStepper modules={modules} currentId={step.id} done={done} onSelect={select} focusTitle={navigated} />
@@ -288,12 +299,13 @@ export default function App({ welcome = false }: AppProps) {
                 step={step}
               />
               {/* A separate window under the screenshot: subtitles + tip/warning + player controls. */}
-              <section className="caption-card relative rounded-2xl border border-[var(--line)] bg-white px-3 pt-2 pb-1.5 md:pe-44">
+              <section className={`caption-card relative rounded-2xl border border-[var(--line)] bg-white px-3 pt-2 pb-1.5 ${player.avatar ? "md:pe-44" : ""}`}>
                 {/* The presenter stands in the caption window (bottom-left), next to her words. */}
                 <div
                   data-testid="presenter-slot"
                   style={{ ["--tilt" as string]: -1 }}
-                  className="presenter-slot absolute bottom-2 left-2 z-20 w-16 md:bottom-1 md:left-3 md:w-[clamp(80px,11vw,190px)]"
+                  aria-hidden={!player.avatar || undefined}
+                  className={`presenter-slot absolute bottom-2 left-2 z-20 w-16 md:bottom-1 md:left-3 md:w-[clamp(80px,11vw,190px)] ${player.avatar ? "" : "pointer-events-none invisible"}`}
                 >
                   <AvatarPanel
                     key={`${step.id}-${replay}-${lang}`}

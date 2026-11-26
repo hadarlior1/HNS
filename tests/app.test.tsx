@@ -181,4 +181,16 @@ describe("App", () => {
     render(<App />);
     expect(screen.getByRole("button", { name: "סיום ההדרכה" })).toBeInTheDocument();
   });
+
+  it("hides the presenter on request while the narration keeps going, and remembers it", () => {
+    render(<App />);
+    const slot = () => screen.getByTestId("presenter-slot");
+    expect(slot()).not.toHaveClass("invisible");
+    fireEvent.click(screen.getAllByRole("button", { name: "צפייה ללא אווטאר" })[0]);
+    expect(slot()).toHaveClass("invisible");
+    expect(slot().querySelector("aside")).toBeInTheDocument(); // still playing, just not shown
+    expect(JSON.parse(localStorage.getItem("hazmanot-training-player-v1")!).avatar).toBe(false);
+    fireEvent.click(screen.getAllByRole("button", { name: "הצגת האווטאר" })[0]);
+    expect(slot()).not.toHaveClass("invisible");
+  });
 });
