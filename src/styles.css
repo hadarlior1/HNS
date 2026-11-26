@@ -383,10 +383,10 @@ html[lang="en"] body {
 
 .module-card {
   display: block;
-  border-radius: 1.25rem;
+  border-radius: 1rem;
   border: 1px solid var(--line);
   background: #fff;
-  padding: 1.1rem 1.1rem 1rem;
+  padding: 0.75rem 0.85rem 0.7rem;
   transition: transform 150ms ease-out, box-shadow 150ms ease-out, border-color 150ms;
   cursor: pointer;
 }

@@ -3,7 +3,7 @@ import { moduleMinutes, seconds } from "../content/localized";
 import { stepLabel } from "../content/label";
 import { LOGO } from "../content/brand";
 import { useT } from "../lib/i18n";
-import Icon, { MODULE_ICON } from "./Icon";
+import Icon from "./Icon";
 
 interface Props {
   modules: Module[];
@@ -88,7 +88,7 @@ export default function Welcome({ modules, done, resumeId, onStart }: Props) {
         <h2 id="modules-title" className="mb-4 text-xl font-bold text-[var(--ink)] md:text-2xl">
           {t("modulesTitle")}
         </h2>
-        <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="grid gap-2.5 sm:grid-cols-3 lg:grid-cols-5">
           {modules
             .filter((m) => m.id !== "0")
             .map((m, i) => {
@@ -99,27 +99,27 @@ export default function Welcome({ modules, done, resumeId, onStart }: Props) {
                 <li key={m.id}>
                   <button type="button" onClick={() => onStart(m.steps[0].id)} className="module-card group h-full w-full text-start">
                     <span className="flex items-start justify-between gap-2">
-                      <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${all ? "bg-[var(--success)] text-white" : "bg-[var(--brand-50)] text-[var(--brand)]"}`}>
-                        <Icon name={all ? "check" : MODULE_ICON[m.id]} className="h-5 w-5" />
+                      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--brand-50)] text-[var(--brand)]">
+                        {all ? <Icon name="check" className="h-3.5 w-3.5" /> : <span className="text-sm font-bold">{i + 1}</span>}
                       </span>
                       <span className="text-xs font-semibold text-[var(--ink-3)]" dir="ltr">
                         {i + 1}/{modules.length - 1}
                       </span>
                     </span>
-                    <span className="mt-3 block text-base font-bold text-[var(--ink)] group-hover:text-[var(--brand)]">{m.title}</span>
-                    <span className="mt-1 flex items-center gap-3 text-sm text-[var(--ink-3)]">
+                    <span className="mt-2 block text-sm font-bold leading-snug text-[var(--ink)] group-hover:text-[var(--brand)]">{m.title}</span>
+                    <span className="mt-1 flex items-center gap-2 text-xs text-[var(--ink-3)]">
                       <span className="inline-flex items-center gap-1">
-                        <Icon name="clock" className="h-4 w-4" />
+                        <Icon name="clock" className="h-3.5 w-3.5" />
                         {moduleMinutes(m)} {t("minutes")}
                       </span>
                       <span>
                         {m.steps.length} {t("statSteps")}
                       </span>
                     </span>
-                    <span className="mt-3 block h-1.5 overflow-hidden rounded-full bg-slate-100">
+                    <span className="mt-2 block h-1 overflow-hidden rounded-full bg-slate-100">
                       <span className="brand-gradient block h-full" style={{ width: `${(n / m.steps.length) * 100}%` }} />
                     </span>
-                    <span className="mt-1.5 block text-xs text-[var(--ink-3)]">{status}</span>
+                    <span className="mt-1 block text-[0.7rem] text-[var(--ink-3)]">{status}</span>
                   </button>
                 </li>
               );
